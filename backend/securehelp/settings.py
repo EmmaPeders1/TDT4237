@@ -101,6 +101,7 @@ ROOT_URLCONF = 'securehelp.urls'
 
 AUTHENTICATION_BACKENDS = [
     'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 TEMPLATES = [
