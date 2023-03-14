@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
@@ -68,8 +69,10 @@ class RegisterSerializer(UserSerializer):
         email = validated_data["email"]
         email_subject = "Activate your account"
         uid = urlsafe_base64_encode(user.username.encode())
+        expiration_date = datetime.now() + timedelta(minutes=1)
+        timestamp = str(int(expiration_date.timestamp()))
         domain = get_current_site(self.context["request"])
-        link = reverse('verify-email', kwargs={"uid": uid})
+        link = reverse('verify-email', kwargs={"uid": uid, "timestamp": timestamp})
 
         url = f"{settings.PROTOCOL}://{domain}{link}"
 

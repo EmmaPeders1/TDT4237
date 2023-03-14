@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'axes',
+    'axes.backends.AxesBackend',
     'apps.users',
     'apps.certifications',
     'apps.help_requests'
