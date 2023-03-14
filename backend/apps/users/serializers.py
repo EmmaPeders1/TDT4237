@@ -14,6 +14,10 @@ from .models import User, Document
 from rest_framework.exceptions import AuthenticationFailed
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+import hmac
+import hashlib
+import base64
+from securehelp.settings import SECRET_KEY
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -58,6 +62,16 @@ class RegisterSerializer(UserSerializer):
         model = get_user_model()
         fields = ['id', 'username', 'email', 'password', 'is_volunteer']
 
+    # Generate a cryptographic signature for the given username
+    def generate_signature(username):
+        # Secret key taken from settings.py, this is most likely a security risk, but since it is already in settings.py it is used
+        secret_key = SECRET_KEY
+        key = force_bytes(secret_key)
+        message = force_bytes(username)
+        signature = hmac.new(key, message, hashlib.sha256).digest()
+        return base64.urlsafe_b64encode(signature).rstrip(b'=')
+
+
     def create(self, validated_data):
         user = get_user_model().objects.create_user(**validated_data)
 
@@ -68,10 +82,11 @@ class RegisterSerializer(UserSerializer):
         email = validated_data["email"]
         email_subject = "Activate your account"
         uid = urlsafe_base64_encode(user.username.encode())
+        signature = self.generate_signature(user.username)
         domain = get_current_site(self.context["request"])
         link = reverse('verify-email', kwargs={"uid": uid})
 
-        url = f"{settings.PROTOCOL}://{domain}{link}"
+        url = f"{settings.PROTOCOL}://{domain}{link}?signature={signature}"
 
         mail = EmailMessage(
             email_subject,
