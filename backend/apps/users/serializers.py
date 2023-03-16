@@ -69,7 +69,7 @@ class RegisterSerializer(UserSerializer):
         email = validated_data["email"]
         email_subject = "Activate your account"
         uid = urlsafe_base64_encode(user.username.encode())
-        expiration_date = datetime.now() + timedelta(minutes=1)
+        expiration_date = datetime.now() + timedelta(hours=24)
         timestamp = str(int(expiration_date.timestamp()))
         domain = get_current_site(self.context["request"])
         link = reverse('verify-email', kwargs={"uid": uid, "timestamp": timestamp})
