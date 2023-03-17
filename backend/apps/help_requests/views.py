@@ -66,8 +66,9 @@ class AcceptHelpRequest(generics.GenericAPIView):
         try:
             rId = base64.b64decode(request.data.get('request_id'))
             rId = pickle.loads(rId)
-            help_request = HelpRequest.objects.raw(
-                "SELECT * FROM help_requests_helprequest WHERE id = %s", [rId])[0]
+            #help_request = HelpRequest.objects.raw(
+            #   "SELECT * FROM help_requests_helprequest WHERE id = %s", [rId])[0]
+            help_request = HelpRequest.objects.filter(id=rId).first()
         except:
             return Response({'error': 'Invalid id'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -98,9 +99,10 @@ class FinishHelpRequest(generics.GenericAPIView):
 
         try:  # check if id is valid
             rId = request.data.get('request_id')
-            help_requests = HelpRequest.objects.raw(
-                "SELECT * FROM help_requests_helprequest WHERE id = '%s'" % rId)
-            help_request = help_requests[0]
+            #help_requests = HelpRequest.objects.raw(
+            #   "SELECT * FROM help_requests_helprequest WHERE id = '%s'" % rId)
+            help_requests = HelpRequest.objects.filter(id=rId)
+            help_request = help_requests.first()
         except:
             return Response({'error': 'Invalid id'}, status=status.HTTP_400_BAD_REQUEST)
         if len(help_requests) == 1:
