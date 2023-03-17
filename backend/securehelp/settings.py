@@ -22,7 +22,7 @@ PRODUCTION = os.getenv('PRODUCTION', False)
 GROUP_ID = os.environ.get("GROUP_ID", "3000")
 PORT_PREFIX = os.environ.get("PORT_PREFIX", "")
 DOMAIN = os.environ.get("DOMAIN", "localhost")
-PROTOCOL = os.environ.get("PROTOCOL", "http")
+PROTOCOL = os.environ.get("PROTOCOL", "https")
 
 
 # Set the URL used for redirecting
@@ -77,10 +77,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'axes',
     'apps.users',
     'apps.certifications',
-    'apps.help_requests'
+    'apps.help_requests',
+    'axes',
 ]
 
 MIDDLEWARE = [
