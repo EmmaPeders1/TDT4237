@@ -71,7 +71,6 @@ class RegisterSerializer(UserSerializer):
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         expiration_date = datetime.now() + timedelta(hours=24)
         timestamp = str(int(expiration_date.timestamp()))
-        signature = self.generate_signature(user.username)
         domain = get_current_site(self.context["request"])
         # generate token for user
         token = EmailVerificationTokenGenerator().make_token(user)
