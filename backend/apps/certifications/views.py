@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from .models import CertificationRequest, Status, Competence
 from .serializers import CertificationRequestSerializer
-from .permissions import IsVolunteer, IsAdmin
+from .permissions import IsVolunteer
 # Create your views here.
 
 
@@ -36,8 +36,8 @@ class CertificationRequestViewSet(viewsets.ModelViewSet):
 
 class AnswerCertificationRequest(generics.GenericAPIView):
     """View to answer certification requests"""
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdmin]
-
+    #permission_classes = [permissions.IsAuthenticated, permissions.IsAdmin]
+    permission_classes = [permissions.isAdminUser]
     def post(self, request):
 
         # check if id and status is provided

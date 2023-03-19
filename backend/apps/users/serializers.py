@@ -68,7 +68,7 @@ class RegisterSerializer(UserSerializer):
         # create email to send to user
         email = validated_data["email"]
         email_subject = "Activate your account"
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        uid = urlsafe_base64_encode(user.username.encode())
         expiration_date = datetime.now() + timedelta(hours=24)
         timestamp = str(int(expiration_date.timestamp()))
         domain = get_current_site(self.context["request"])

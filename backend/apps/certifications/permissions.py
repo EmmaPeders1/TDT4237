@@ -7,7 +7,7 @@ class IsVolunteer(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_volunteer
 
-class IsAdmin(permissions.Basepermission):
-    
-    def has_permission(self, request, view):
-        return request.user.is_staff
+#class IsAdmin(permissions.Basepermission):
+#
+#    def has_permission(self, request, view):
+#        return request.user.is_staff
