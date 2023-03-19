@@ -15,7 +15,7 @@ from .models import User, Document
 from rest_framework.exceptions import AuthenticationFailed
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-
+from .emailVerificationToken import EmailVerificationTokenGenerator
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for users"""
@@ -68,11 +68,13 @@ class RegisterSerializer(UserSerializer):
         # create email to send to user
         email = validated_data["email"]
         email_subject = "Activate your account"
-        uid = urlsafe_base64_encode(user.username.encode())
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
         expiration_date = datetime.now() + timedelta(hours=24)
         timestamp = str(int(expiration_date.timestamp()))
         domain = get_current_site(self.context["request"])
-        link = reverse('verify-email', kwargs={"uid": uid, "timestamp": timestamp})
+        # generate token for user
+        token = EmailVerificationTokenGenerator().make_token(user)
+        link = reverse('verify-email', kwargs={"uid": uid, "timestamp": timestamp, "token": token})
 
         url = f"{settings.PROTOCOL}://{domain}{link}"
 
