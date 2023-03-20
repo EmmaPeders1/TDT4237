@@ -99,7 +99,7 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
 class VerificationView(generics.GenericAPIView):
     """View for verifying user registration links"""
 
-    def get(self, request, uid, timestamp):
+    def get(self, request, uid, timestamp, token):
         verified_url = settings.URL + "/verified"
         invalid_url = settings.URL + "/invalid"
         try:
@@ -109,7 +109,7 @@ class VerificationView(generics.GenericAPIView):
 
             if expiration_date < datetime.now():
                 return redirect(invalid_url)
-            
+
             user.is_active = True  # Activate user
             user.save()
 
