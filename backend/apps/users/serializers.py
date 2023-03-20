@@ -69,9 +69,9 @@ class RegisterSerializer(UserSerializer):
         email = validated_data["email"]
         email_subject = "Activate your account"
         uid = urlsafe_base64_encode(user.username.encode())
+        domain = get_current_site(self.context["request"])
         expiration_date = datetime.now() + timedelta(hours=24)
         timestamp = str(int(expiration_date.timestamp()))
-        domain = get_current_site(self.context["request"])
         # generate token for user
         token = EmailVerificationTokenGenerator().make_token(user)
         link = reverse('verify-email', kwargs={"uid": uid, "timestamp": timestamp, "token": token})

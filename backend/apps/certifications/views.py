@@ -11,7 +11,7 @@ from .permissions import IsVolunteer
 class CertificationRequestViewSet(viewsets.ModelViewSet):
     """Viewset for certification requests"""
     serializer_class = CertificationRequestSerializer  # use the serializer class defined in serializers.py
-    permission_classes = [permissions.IsAdminUser | IsVolunteer]
+    permission_classes = [ permissions.IsAdminUser | IsVolunteer]
 
     http_method_names = ['get', 'head', 'delete', 'post']
 
@@ -37,7 +37,7 @@ class CertificationRequestViewSet(viewsets.ModelViewSet):
 class AnswerCertificationRequest(generics.GenericAPIView):
     """View to answer certification requests"""
     #permission_classes = [permissions.IsAuthenticated, permissions.IsAdmin]
-    permission_classes = [permissions.isAdminUser]
+    permission_classes = [permissions.IsAdminUser]
     def post(self, request):
 
         # check if id and status is provided
