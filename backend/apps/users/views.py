@@ -183,6 +183,17 @@ class SetNewPasswordView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         return Response({'success': True, 'message': 'Password reset success'}, status=status.HTTP_200_OK)
 
+class LogoutView(generics.GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            token = RefreshToken(request.data["refresh_token"])
+            token.blacklist()
+            return Response({'success': True, 'message': 'You have been logged out'}, status=status.HTTP_200_OK)
+        except Exception as ex:
+            return Response({'Something went wrong when logging out'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class DocumentViewSet(viewsets.ModelViewSet):
     """ViewSet for the Document model"""
