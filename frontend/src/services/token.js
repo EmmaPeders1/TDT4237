@@ -1,3 +1,5 @@
+import api from "./api";
+
 const getLocalRefreshToken = () => {
   return localStorage.getItem("refresh_token");
 };
@@ -23,6 +25,13 @@ const setUser = (user) => {
   localStorage.setItem("user", JSON.stringify(user));
 };
 
+const removeTokenRequest = async () => {
+  const data = {
+    refresh_token: localStorage.getItem("refresh_token")
+  }
+  api.post("/logout/", data)
+};
+
 const removeUser = () => {
   localStorage.removeItem("user");
   localStorage.removeItem("access_token");
@@ -30,6 +39,7 @@ const removeUser = () => {
 };
 
 const TokenService = {
+  removeTokenRequest,
   getLocalRefreshToken,
   setLocalRefreshToken,
   getLocalAccessToken,
