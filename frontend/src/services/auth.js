@@ -38,7 +38,8 @@ const newPassword = (data) => {
 };
 
 const logout = () => {
-  TokenService.removeUser();
+  TokenService.removeTokenRequest();
+  //TokenService.removeUser();
 };
 
 const getCurrentUser = () => {
